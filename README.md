@@ -1,61 +1,154 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# HopeBridge Foundation Website
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Project Overview
 
-## About Laravel
+Welcome to the HopeBridge Foundation website repository! This project aims to create a modern, responsive, and operational web platform for the HopeBridge Foundation, an NGO dedicated to providing essential social amenities for rural communities and empowering youths and students in West Africa, particularly in Nigeria.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+This repository contains the codebase for the official HopeBridge Foundation website, including core information, community projects showcase, and a dedicated scholarship application portal for the "HopeBridge Midwestern Scholars Program."
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Brand Elements
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+The HopeBridge Foundation brand identity is built around a blend of stability, hope, and community.
 
-## Learning Laravel
+**Primary Colors:**
+* **HopeBridge Blue:** `#002244` (Dark, representing trust, stability, and professionalism)
+* **HopeBridge Orange:** `#F46A1F` (Vibrant, representing hope, energy, and community)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+**Secondary Colors:**
+* **Light Grey:** `#F8F9FA` (For backgrounds, softer elements)
+* **Dark Grey:** `#343A40` (For text, strong contrasts)
+* **Accent Green:** `#28A745` (For success indicators, calls to action)
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+**Logo Concept:**
+The logo combines a stylized bridge icon with a subtle hand reaching upwards, symbolizing "Connecting Communities" and "Empowering Generations." It primarily utilizes HopeBridge Blue and Orange.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+**Logo Files:**
+* `logo.svg`: Scalable Vector Graphics for crisp display at any size.
+* `logo-icon.png`: Favicon and smaller icon usage.
+* `logo-full.png`: Full logo with text for general use.
 
-## Laravel Sponsors
+These logo files are located in `public/assets/img/`.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## Folder and File Structure
 
-### Premium Partners
+The project follows a clean and organized folder structure, separating public-facing files from sensitive server-side logic and configuration.
+```
+hopebridge-foundation/
+├── app/
+│   ├── Http/
+│   │   ├── Controllers/
+│   │   │   ├── AboutController.php
+│   │   │   ├── ContactController.php
+│   │   │   ├── DonateController.php
+│   │   │   ├── HomeController.php
+│   │   │   ├── ProjectController.php
+│   │   │   └── ScholarshipController.php
+│   │   └── Middleware/
+│   │       └── ... (Laravel default middleware)
+│   ├── Mail/
+│   │   ├── ContactFormMail.php
+│   │   └── ScholarshipApplicationConfirmation.php
+│   └── Models/
+│       └── Scholarship.php
+├── bootstrap/
+│   └── ... (Laravel default files)
+├── config/
+│   ├── app.php
+│   ├── auth.php
+│   ├── database.php
+│   ├── filesystems.php   # <-- This file will have the Supabase disk configuration
+│   ├── logging.php      # <-- This file configures daily logs
+│   └── ... (other Laravel config files)
+├── database/
+│   ├── migrations/
+│   │   └── 2025_xx_xx_xxxxxx_create_scholarships_table.php  # (if a migration is created)
+│   └── ... (Laravel default files)
+├── public/
+│   ├── css/
+│   │   └── hopebridge.css
+│   ├── images/
+│   │   ├── about-us-hero.jpg      # Sample image
+│   │   ├── hero-bg.jpg            # Sample image (if used for hero section)
+│   │   ├── logo.svg
+│   │   ├── logo-full.png
+│   │   ├── logo-icon.png
+│   │   ├── project-borehole.jpg   # Sample image
+│   │   ├── project-digital-skills.jpg # Sample image
+│   │   ├── project-school.jpg     # Sample image
+│   │   └── team-member-placeholder.jpg # Sample image
+│   ├── js/
+│   │   └── hopebridge.js
+│   └── robots.txt                # For SEO
+├── resources/
+│   ├── css/
+│   │   └── app.css (Laravel default, used if compiling with Vite/Mix)
+│   ├── js/
+│   │   └── app.js (Laravel default, used if compiling with Vite/Mix)
+│   ├── sass/ (if using Sass for custom CSS)
+│   │   └── app.scss
+│   ├── views/
+│   │   ├── emails/
+│   │   │   ├── contact.blade.php
+│   │   │   └── scholarship_confirmation.blade.php
+│   │   ├── errors/
+│   │   │   ├── 404.blade.php
+│   │   │   └── 500.blade.php
+│   │   ├── layouts/
+│   │   │   └── app.blade.php
+│   │   ├── scholarship/
+│   │   │   ├── apply.blade.php
+│   │   │   └── status.blade.php
+│   │   ├── about.blade.php
+│   │   ├── contact.blade.php
+│   │   ├── donate.blade.php
+│   │   ├── home.blade.php
+│   │   └── projects.blade.php
+│   └── views/
+│       └── welcome.blade.php (Laravel default, can be removed)
+├── routes/
+│   ├── api.php
+│   ├── channels.php
+│   ├── console.php
+│   └── web.php                  # <-- All your web routes defined here
+├── storage/
+│   ├── app/
+│   │   └── public/
+│   │       └── scholarship_documents/ # For temporary local file storage before Supabase integration is fully live
+│   ├── framework/
+│   └── logs/
+│       └── laravel-YYYY-MM-DD.log # Daily log files will appear here
+├── tests/
+│   └── ... (Laravel default files)
+└── vendor/             # (Optional) Composer dependencies (if any PHP libraries are added in the future)
+├── .env                # Environment variables for Supabase, Mail, etc. (NOT committed to Git)
+├── .env.example        # Example .env file (committed to Git)
+├── .gitattributes
+├── .gitignore          # Ensures .env and vendor/ are ignored by Git
+├── composer.json       # Project dependencies (including quix-labs/laravel-supabase-flysystem)
+├── composer.lock
+├── package.json
+├── phpunit.xml
+├── README.md           # Project README file
+├── LICENSE             # Project LICENSE file
+├── server.php
+└── vite.config.js (or webpack.mix.js if using Laravel Mix)
+└── vercel.json           # Vercel configuration file
+```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
 
-## Contributing
+## How to Get Started
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+This section provides a high-level overview of setting up and running the HopeBridge Foundation website.
 
-## Code of Conduct
+1.  **Clone the Repository:**
+    Get a copy of the project code from GitHub.
+2.  **Environment Configuration:**
+    Set up your `.env` file with necessary database credentials (Supabase), email settings, and application constants. Remember to encrypt sensitive passwords and manage the encryption key securely.
+3.  **Database Setup (Supabase):**
+    Create your database and tables in Supabase as per the schema (e.g., `scholarships`). Configure Supabase Storage for document uploads.
+4.  **Install Dependencies (if any):**
+    While this project avoids frameworks, if external PHP libraries (like PHPMailer for robust email sending) are later introduced, Composer might be required.
+5.  **Deployment (Vercel):**
+    Deploy the application to Vercel, ensuring correct `vercel.json` configuration for PHP runtime and environment variables.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+For detailed instructions on setup, development, and deployment, please refer to the comprehensive documentation provided by the development team.

@@ -60,6 +60,18 @@ return [
             'report' => false,
         ],
 
+        'supabase' => [
+            'driver' => 'supabase',
+            'url' => env('SUPABASE_URL'),
+            'key' => env('SUPABASE_SERVICE_KEY'),
+            'bucket' => env('AWS_BUCKET'),
+            'options' => [
+                'defaultBucketPublic' => false, // Set to true if bucket is public, false if private
+                // You might need to specify the storage URL explicitly if the `url()` helper doesn't generate it correctly
+                // 'storageUrl' => env('SUPABASE_STORAGE_URL'), // E.g., https://abcde12345.supabase.co/storage/v1
+            ],
+        ],
+
     ],
 
     /*
