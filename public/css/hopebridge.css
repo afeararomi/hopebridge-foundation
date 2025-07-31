@@ -73,15 +73,29 @@ main {
 
 /* General Button Styles */
 .btn-primary {
+    /* Initial state: white text on hopebridge-orange background */
     background-color: var(--hopebridge-orange);
     border-color: var(--hopebridge-orange);
     color: #fff;
-    transition: all 0.3s ease;
+    transition: all 0.3s ease; /* Ensure a smooth transition on hover */
 }
 
 .btn-primary:hover {
-    background-color: darken(var(--hopebridge-orange), 10%); /* Placeholder for darker shade, ideally use Sass function */
-    border-color: darken(var(--hopebridge-orange), 10%);
+    /* Hover state: hopebridge-orange text on white background with hopebridge-orange border */
+    /* background-color: darken(var(--hopebridge-orange), 10%); Placeholder for darker shade, ideally use Sass function */
+    /* border-color: darken(var(--hopebridge-orange), 10%); */
+    background-color: #fff;
+    border: 2px solid var(--hopebridge-orange); /* Keep the border color consistent */
+    color: var(--hopebridge-orange);
+}
+
+/* Update the 'active' state as well for consistency */
+.btn-primary:active,
+.btn-primary:focus {
+    background-color: #fff !important;
+    border-color: var(--hopebridge-orange) !important;
+    color: var(--hopebridge-orange) !important;
+    box-shadow: 0 0 0 0.25rem rgba(244, 106, 31, 0.5) !important; /* A subtle shadow on focus */
 }
 
 .btn-success {

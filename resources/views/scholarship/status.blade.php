@@ -24,7 +24,10 @@
                                     <div class="invalid-feedback">Please enter your application ID.</div>
                                 </div>
                                 <div class="d-grid">
-                                    <button type="submit" class="btn btn-primary btn-lg">Check Status</button>
+                                    <button type="submit" class="btn btn-primary btn-lg" id="statusCheckBtn">
+                                        <span id="statusBtnText">Check Status</span>
+                                        <span id="statusBtnSpinner" class="spinner-border spinner-border-sm text-light d-none" role="status" aria-hidden="true"></span>
+                                    </button>
                                 </div>
                             </form>
 
@@ -61,15 +64,44 @@
 @section('footer_scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Basic client-side validation for the application ID field
+            // Get DOM elements
             const statusCheckForm = document.getElementById('statusCheckForm');
+            const statusCheckBtn = document.getElementById('statusCheckBtn');
+            const statusBtnText = document.getElementById('statusBtnText');
+            const statusBtnSpinner = document.getElementById('statusBtnSpinner');
+            const applicationIdInput = document.getElementById('application_id');
+
+            // Function to toggle the loading state of the button
+            function toggleLoadingState(isLoading) {
+                if (isLoading) {
+                    statusCheckBtn.disabled = true;
+                    statusBtnText.classList.add('d-none');
+                    statusBtnSpinner.classList.remove('d-none');
+                } else {
+                    statusCheckBtn.disabled = false;
+                    statusBtnText.classList.remove('d-none');
+                    statusBtnSpinner.classList.add('d-none');
+                }
+            }
+
+            // Basic client-side validation for the application ID field
             statusCheckForm.addEventListener('submit', function(event) {
-                const applicationIdInput = document.getElementById('application_id');
+                // Perform basic client-side validation for the application ID field
                 if (!applicationIdInput.value.trim()) {
                     event.preventDefault(); // Prevent form submission
                     applicationIdInput.classList.add('is-invalid');
                 } else {
-                    applicationIdInput.classList.remove('is-invalid');
+                    // Validation passed, show the spinner and disable the button
+                    toggleLoadingState(true);
+                    // Let the form submit naturally to trigger the GET request
+                }
+            });
+            
+            // Revert loading state if the user navigates back to this page
+            // This is useful in case the page is cached and they hit the back button
+            window.addEventListener('pageshow', function(event) {
+                if (event.persisted) {
+                    toggleLoadingState(false);
                 }
             });
         });

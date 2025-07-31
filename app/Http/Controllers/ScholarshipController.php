@@ -63,23 +63,41 @@ class ScholarshipController extends Controller
 
         $fileUrls = [];
 
-        try {
+        try 
+        {
             // 2. File Uploads to Supabase Storage using 'supabase' disk
-            $uploadBaseDir = 'applications/' . $applicationId . '/'; // Path within the bucket for this application's files
+            // Files will be uploaded to: scholarship-documents/applications/{application_id}/{original_filename}
+            $uploadBaseDir = 'applications/' . $applicationId . '/'; // Path within the bucket for this application's files; Matches RLS policy
 
-            foreach (['birth_certificate', 'national_id_card', 'university_library_card'] as $fileField) {
-                if ($request->hasFile($fileField)) {
+            foreach (['birth_certificate', 'national_id_card', 'university_library_card'] as $fileField) 
+            {
+                if ($request->hasFile($fileField)) 
+                {
                     $file = $request->file($fileField);
-                    $fileName = $fileField . '.' . $file->getClientOriginalExtension(); // e.g., 'birth_certificate.pdf'
+                    // $fileName = $fileField . '.' . $file->getClientOriginalExtension(); // e.g., 'birth_certificate.pdf'
+                    // Use a clean filename (e.g., birth_certificate.pdf, national_id_card.png)
+                    $originalFileName = Str::slug($fileField) . '.' . $file->getClientOriginalExtension();
 
+                    // Log::channel('daily')->info("Attempting to upload {$fileName} to {$uploadBaseDir}");
+                    Log::channel('daily')->info("Attempting to upload {$originalFileName} for application ID: {$applicationId}");
+
+                    // Check if file object is valid before attempting upload
+                    if (!$file->isValid()) {
+                        // Log::channel('daily')->error("Uploaded file {$fileName} is not valid.");
+                        Log::channel('daily')->error("Uploaded file {$originalFileName} for field {$fileField} is not valid.");
+                        continue; // Skip to next file
+                    }
+                    
+                    // Perform the upload using the 'supabase' disk configured in filesystems.php
                     // Upload the file to Supabase Storage using the 'supabase' disk
-                    // Note: putFileAs returns the path relative to the disk's root.
-                    // For Supabase, this path should be directly usable to construct the URL.
-                    $filePath = Storage::disk('supabase')->putFileAs(
-                        $uploadBaseDir, // Directory within the bucket
-                        $file,
-                        $fileName,
-                        ['public'] // Use 'public' if you want direct access via URL, otherwise omit for private
+                    // We're assuming the Supabase bucket is set to PRIVATE (recommended for sensitive documents)
+                    // and thus we are NOT passing ['public'] option, meaning access will require signed URLs or service_role access from the backend.
+                    // Note: putFileAs returns the path relative to the disk's root. For Supabase, this path should be directly usable to construct the URL.
+                    $uploadedFilePath = Storage::disk('supabase')->putFileAs(
+                        $uploadBaseDir,     // Directory within the bucket (e.g., 'applications/UUID/')
+                        $file,              // The file to upload
+                        $originalFileName   // The desired filename in storage (e.g., 'birth_certificate.pdf')
+                                            // [] Use ['public'] if you want direct access via URL, otherwise omit for private
                     );
 
                     // Construct the full URL for the stored file.
@@ -87,7 +105,28 @@ class ScholarshipController extends Controller
                     // [SUPABASE_URL]/storage/v1/object/public/[BUCKET_NAME]/[FILE_PATH]
                     // We'll rely on a helper or direct construction for the URL.
                     // If 'public' option is not used above, this URL will require signing.
-                    $fileUrls[$fileField] = Storage::disk('supabase')->url($filePath);
+
+                    if($uploadedFilePath) 
+                    {
+                        // The `url()` method for private buckets might return a path
+                        // For public buckets, it returns a direct URL.
+                        // For private files, you typically generate a signed URL when needed for download.
+                        // For now, we store the internal path, and you'd generate signed URLs if the NGO needs to view them.
+                        // If your bucket is PUBLIC, then Storage::disk('supabase')->url($uploadedFilePath) will give you a direct URL.
+                        // $fileUrls[$fileField] = Storage::disk('supabase')->url($uploadedFilePath);
+                        // Log::channel('daily')->info("Successfully uploaded {$fileName}. URL: {$fileUrls[$fileField]}");
+                        $fileUrls[$fileField] = $uploadedFilePath; // Store the relative path within the bucket
+                        Log::channel('daily')->info("Successfully uploaded {$originalFileName}. Path: {$uploadedFilePath}");
+                    } 
+                    else 
+                    {
+                        // Log::channel('daily')->error("Failed to upload {$fileName}. putFileAs returned false.");
+                        Log::channel('daily')->error("Failed to upload {$originalFileName}. putFileAs returned false.");
+                    }
+                } 
+                else 
+                {
+                    Log::channel('daily')->warning("No file provided for field: {$fileField}. Validation should have caught this.");
                 }
             }
 
@@ -128,15 +167,30 @@ class ScholarshipController extends Controller
                 'application_id' => $applicationId
             ])->withInput(['application_id' => $applicationId]);
 
-        } catch (\Exception $e) {
+        } catch (\Exception $e) 
+        {
             // Log the error
-            Log::channel('daily')->error('Scholarship Application Error: ' . $e->getMessage(), [
+            Log::channel('daily')->error('File Upload/Scholarship Application Submission Error: ' . $e->getMessage(), [
                 'exception' => $e,
-                'request_data' => $request->all() // Log request data for debugging
+                'trace' => $e->getTraceAsString(), // Get full stack trace
+                'request_data' => $request->all(), // Log request data for debugging
+                'request_files' => $request->allFiles() // See what files were in the request
             ]);
+
+            // Clean up any partially uploaded files if an error occurs after some uploads
+            foreach ($fileUrls as $pathToDelete) {
+                if ($pathToDelete && Storage::disk('supabase')->exists($pathToDelete)) {
+                    Storage::disk('supabase')->delete($pathToDelete);
+                    Log::channel('daily')->info("Cleaned up partially uploaded file: {$pathToDelete}");
+                }
+            }
+
+            // Re-throw or handle error appropriately
             return redirect()->back()->with('error', 'There was an error processing your application. Please try again later.')->withInput();
         }
     }
+
+
 
     // ... rest of the controller remains the same ...
     public function checkStatus(Request $request)
@@ -175,4 +229,6 @@ class ScholarshipController extends Controller
 
         return view('scholarship.status', compact('applicationStatus', 'error', 'applicationId'));
     }
+
+
 }

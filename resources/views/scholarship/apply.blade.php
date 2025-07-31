@@ -5,8 +5,11 @@
 @section('description', 'Apply for the HopeBridge Midwestern Scholars Program. A yearly scholarship for Year 2 undergraduates from Edo and Delta states, Nigeria.')
 
 @section('head_scripts')
-    {{-- For date picker (flatpickr is a good lightweight option) --}}
+    @parent {{-- Keep parent scripts if any --}}
+    {{-- Flatpickr CSS -- (a good lightweight option for date picker) --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    {{-- Select2 CSS for searchable dropdowns --}}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 @endsection
 
 @section('content')
@@ -60,6 +63,7 @@
                                 <label for="lga_of_origin" class="form-label">Local Govt Area of Origin <span class="text-danger">*</span></label>
                                 <select class="form-select" id="lga_of_origin" name="lga_of_origin" required disabled>
                                     <option value="">Select LGA</option>
+                                    {{-- LGAs will be dynamically populated by JavaScript with Select2 --}}
                                 </select>
                                 <div class="invalid-feedback">Please select your local government area.</div>
                             </div>
@@ -83,7 +87,7 @@
                                 <label for="university_name" class="form-label">University Name <span class="text-danger">*</span></label>
                                 <select class="form-select" id="university_name" name="university_name" required>
                                     <option value="">Select University</option>
-                                    {{-- Options will be populated by JavaScript --}}
+                                    {{-- Options will be populated by JavaScript with Select2--}}
                                 </select>
                                 <div class="invalid-feedback">Please select your university.</div>
                             </div>
@@ -116,7 +120,11 @@
                         </div>
 
                         <div class="d-grid gap-2 mt-5">
-                            <button type="submit" class="btn btn-primary btn-lg">Submit Application</button>
+                            <button type="submit" class="btn btn-primary btn-lg" id="submitBtn">
+                                {{-- Text and spinner for the button --}}
+                                <span id="submitBtnText">Submit Application</span>
+                                <span id="submitBtnSpinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -126,11 +134,18 @@
 @endsection
 
 @section('footer_scripts')
+    @parent {{-- Keep parent scripts if any --}}
+    {{-- JQuery is a dependency for Select2 --}}
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
+    {{-- Select2 JS --}}
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     {{-- Flatpickr JS --}}
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
     {{-- Page-specific JavaScript for Scholarship Form --}}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            
             // Initialize Flatpickr for Date of Birth field
             flatpickr("#dob", {
                 dateFormat: "Y-m-d", // YYYY-MM-DD format
@@ -174,9 +189,17 @@
             ];
 
             // --- DOM Elements ---
+            // ... (keep all your existing DOM element references here) ...
+            const scholarshipApplicationForm = document.getElementById('scholarshipApplicationForm');
+            const submitBtn = document.getElementById('submitBtn');
+            const submitBtnText = document.getElementById('submitBtnText');
+            const submitBtnSpinner = document.getElementById('submitBtnSpinner');
+
             const stateOfOriginSelect = document.getElementById('state_of_origin');
-            const lgaOfOriginSelect = document.getElementById('lga_of_origin');
-            const universityNameSelect = document.getElementById('university_name');
+            //const lgaOfOriginSelect = document.getElementById('lga_of_origin');
+            const lgaOfOriginSelect = $('#lga_of_origin');
+            //const universityNameSelect = document.getElementById('university_name');
+            const universityNameSelect = $('#university_name');
             const dobInput = document.getElementById('dob');
             const emailInput = document.getElementById('email');
 
@@ -189,36 +212,38 @@
 
             // --- Functions for Dynamic Dropdowns ---
 
-            function populateLgaDropdown(selectedState) {
-                lgaOfOriginSelect.innerHTML = '<option value="">Select LGA</option>'; // Clear existing options
+            function populateLgaDropdown(selectedState) 
+            {
+                // Clear existing options
+                lgaOfOriginSelect.empty().append('<option value="">Select LGA</option>');
+
                 if (selectedState && lgaData[selectedState]) {
-                    lgaData[selectedState].forEach(lga => {
-                        const option = document.createElement('option');
-                        option.value = lga;
-                        option.textContent = lga;
-                        lgaOfOriginSelect.appendChild(option);
+                    const lgas = lgaData[selectedState];
+                    lgas.forEach(lga => {
+                        lgaOfOriginSelect.append(new Option(lga, lga));
                     });
-                    lgaOfOriginSelect.disabled = false; // Enable LGA dropdown
+                    lgaOfOriginSelect.prop('disabled', false); // Enable LGA dropdown
                 } else {
-                    lgaOfOriginSelect.disabled = true; // Disable if no state selected or no data
+                    lgaOfOriginSelect.prop('disabled', true); // Disable if no state selected
                 }
                 // Reset validation state for LGA
-                lgaOfOriginSelect.classList.remove('is-invalid');
+                lgaOfOriginSelect.removeClass('is-invalid');
+                lgaOfOriginSelect.trigger('change.select2'); // Notify Select2 of the change
             }
 
-            function populateUniversityDropdown() {
-                universityList.sort(); // Optional: Sort universities alphabetically
+            function populateUniversityDropdown() 
+            {
+                universityList.sort(); // Sort universities alphabetically
                 universityList.forEach(university => {
-                    const option = document.createElement('option');
-                    option.value = university;
-                    option.textContent = university;
-                    universityNameSelect.appendChild(option);
+                    universityNameSelect.append(new Option(university, university));
                 });
+                universityNameSelect.trigger('change.select2'); // Notify Select2 of the change
             }
 
             // --- Functions for Frontend Validations ---
 
-            function validateDob() {
+            function validateDob() 
+            {
                 const dobValue = dobInput.value;
                 const feedbackElement = document.getElementById('dob-feedback');
                 if (!dobValue) {
@@ -245,7 +270,8 @@
                 }
             }
 
-            function validateEmail() {
+            function validateEmail() 
+            {
                 const emailValue = emailInput.value.trim();
                 const feedbackElement = document.getElementById('email-feedback');
                 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Simple regex for email format
@@ -267,7 +293,8 @@
                 }
             }
 
-            function validateFile(fileInput, feedbackId) {
+            function validateFile(fileInput, feedbackId) 
+            {
                 const file = fileInput.files[0];
                 const feedbackElement = document.getElementById(feedbackId);
 
@@ -295,7 +322,8 @@
                 return true;
             }
 
-            function validateForm() {
+            function validateForm() 
+            {
                 let isValid = true;
 
                 // Validate all required text/select fields (Bootstrap's native validation)
@@ -323,10 +351,32 @@
                 return isValid;
             }
 
+            /**
+             * Toggles the loading state of the submit button.
+             * @param {boolean} isLoading - True to show spinner, false to hide.
+             */
+            function toggleLoadingState(isLoading) 
+            {
+                if (isLoading) {
+                    submitBtn.disabled = true;
+                    submitBtnText.classList.add('d-none');
+                    submitBtnSpinner.classList.remove('d-none');
+                } else {
+                    submitBtn.disabled = false;
+                    submitBtnText.classList.remove('d-none');
+                    submitBtnSpinner.classList.add('d-none');
+                }
+            }
+
             // --- Event Listeners ---
 
-            stateOfOriginSelect.addEventListener('change', function() {
+            /* stateOfOriginSelect.addEventListener('change', function() {
                 populateLgaDropdown(this.value);
+            }); */
+            
+            // This is the event listener to trigger the change in LGA options
+            $('#state_of_origin').on('change', function() {
+                populateLgaDropdown($(this).val());
             });
 
             birthCertificateInput.addEventListener('change', function() {
@@ -344,7 +394,8 @@
             dobInput.addEventListener('change', validateDob); // Flatpickr's onChange also calls this
 
             document.getElementById('scholarshipApplicationForm').addEventListener('submit', function(event) {
-                if (!validateForm()) {
+                if (!validateForm()) 
+                {
                     event.preventDefault(); // Prevent form submission if validation fails
                     event.stopPropagation();
                     // Scroll to the first invalid element for better UX
@@ -352,15 +403,45 @@
                     if (firstInvalid) {
                         firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     }
+                } else 
+                {
+                    // All validations passed, we can now submit the form. But first, we prevent the 
+                    // default submission behavior and show the spinner to indicate processing.
+                    event.preventDefault();
+                    toggleLoadingState(true);
+
+                    // Manually submit the form after a short delay to ensure spinner is visible.
+                    // A direct submit() call in the same event loop might not render the spinner.
+                    // This is for visual effect only; the backend call is synchronous.
+                    setTimeout(() => {
+                        this.submit();
+                    }, 500); // 500ms delay for a better user experience
                 }
+                
                 this.classList.add('was-validated'); // Add Bootstrap's validated class for visual feedback
             });
 
 
+            // --- Select2 Initialization and Event Handlers ---
+            // The `select2` method is provided by the library.
+            lgaOfOriginSelect.select2({
+                placeholder: "Search for your LGA",
+                allowClear: true
+            });
+
+            universityNameSelect.select2({
+                placeholder: "Search for your university",
+                allowClear: true
+            });
+
+
             // --- Initial Load Operations ---
-            populateUniversityDropdown(); // Populate universities when page loads
-            // Initially disable LGA dropdown until a state is selected
-            lgaOfOriginSelect.disabled = true;
+            // Populate universities when page loads. Initially disable LGA dropdown until a state is selected
+            populateUniversityDropdown(); 
+            // lgaOfOriginSelect.disabled = true;
+            lgaOfOriginSelect.prop('disabled', true);
+
+
         });
     </script>
 @endsection
