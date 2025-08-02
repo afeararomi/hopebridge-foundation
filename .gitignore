@@ -4,7 +4,6 @@ Homestead.json
 Homestead.yaml
 /node_modules
 /storage/logs/*
-/vendor
 .env
 .env.dev
 .env.production
