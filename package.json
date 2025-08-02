@@ -9,7 +9,7 @@
   "scripts": {
     "build": "vite build",
     "dev": "vite",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "vercel-build": "npm install && npm run build"
   },
   "repository": {
     "type": "git",
@@ -24,9 +24,10 @@
   },
   "homepage": "https://github.com/afeararomi/hopebridge-foundation#readme",
   "engines": {
-    "node": "14.x"
+    "node": "22.x"
   },
   "devDependencies": {
-    "vercel-php": "^0.7.4"
+    "vercel-php": "^0.7.4",
+    "vite": "^7.0.6"
   }
 }
