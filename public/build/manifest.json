@@ -1,0 +1,16 @@
+{
+  "public/css/hopebridge.css": {
+    "file": "assets/hopebridge-WbcTJ5P5.css",
+    "src": "public/css/hopebridge.css",
+    "isEntry": true,
+    "names": [
+      "hopebridge.css"
+    ]
+  },
+  "public/js/hopebridge.js": {
+    "file": "assets/hopebridge-BzNFVQ6V.js",
+    "name": "hopebridge",
+    "src": "public/js/hopebridge.js",
+    "isEntry": true
+  }
+}

@@ -2,6 +2,7 @@
 /storage/pail
 Homestead.json
 Homestead.yaml
+/node_modules
 /storage/logs/*
 /vendor
 .env
