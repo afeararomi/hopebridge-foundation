@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "vite",
     "build": "php artisan vendor:publish --tag=laravel-assets && vite build",
-    "vercel-build": "composer install --no-dev --optimize-autoloader && php artisan config:cache && php artisan route:cache && php artisan view:cache"
+    "vercel-build": "php artisan config:cache && php artisan route:cache && php artisan view:cache"
   },
   "repository": {
     "type": "git",
