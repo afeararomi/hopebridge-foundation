@@ -188,7 +188,7 @@ You need a new Supabase project to serve as the local development database.
 2.  Name the project e.g. `hopebridge-ngo`
 3.  Save the database password you create for this new project.  This password will replace the `[YOUR_PASSWORD]` placeholder in the `DB_URL` string in your **.env** file.
 4.  Once the project is created, use the vertical menu bar on the left of your screen to navigate to the **Storage** page.
-5.  Create a new bucket named **scholarship-documents**
+5.  Create a new bucket named **scholarship-documents**. Note this should be a **private** bucket.
 6.  You will need to define policies on Supabase for the new storage bucket. So use the vertical menu bar on the left of your screen to navigate to the **SQL Editor** page. Create a new snippet, paste and run the queries below.
 
     ```
