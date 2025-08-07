@@ -1,0 +1,35 @@
+{
+  "name": "hopebridge-foundation",
+  "version": "1.0.0",
+  "description": "Welcome to the HopeBridge Foundation website repository! This project aims to create a modern, responsive, and operational web platform for the HopeBridge Foundation, an NGO dedicated to providing essential social amenities for rural communities and empowering youths and students in West Africa, particularly in Nigeria.",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "php artisan vendor:publish --tag=laravel-assets && vite build",
+    "vercel-build": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/afeararomi/hopebridge-foundation.git"
+  },
+  "keywords": [],
+  "author": "Afe Araromi",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/afeararomi/hopebridge-foundation/issues"
+  },
+  "homepage": "https://github.com/afeararomi/hopebridge-foundation#readme",
+  "engines": {
+    "node": "22.x"
+  },
+  "devDependencies": {
+    "laravel-vite-plugin": "^2.0.0",
+    "vercel-php": "^0.7.4",
+    "vite": "^7.0.6"
+  }
+
+}

@@ -1,0 +1,280 @@
+/* public/css/hopebridge.css */
+
+/* Define HopeBridge Brand Colors as CSS Variables */
+:root {
+    --hopebridge-blue: #002244; /* Primary Dark Blue */
+    --hopebridge-orange: #F46A1F; /* Primary Accent Orange */
+    --light-gray: #F8F9FA; /* Secondary: For backgrounds, softer elements */
+    --dark-gray: #343A40; /* Secondary: For text, strong contrasts */
+    --accent-green: #28A745; /* Accent: For success indicators, calls to action */
+}
+
+/* General Body Styles */
+body {
+    font-family: 'Arial', sans-serif; /* A clear, readable font */
+    color: var(--dark-gray); /* Default text color */
+    background-color: var(--light-gray); /* Overall light background */
+    min-height: 100vh; /* Ensure body takes full viewport height for footer sticky */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Ensure main content pushes footer down */
+main {
+    flex: 1; /* Allow main content to grow and push the footer down */
+}
+
+/* Navigation Bar Styling */
+.navbar {
+    background-color: var(--hopebridge-blue) !important; /* HopeBridge Blue background */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+.navbar-brand {
+    color: #fff !important; /* White text for brand name */
+    font-weight: 700; /* Bold font for prominence */
+    font-size: 1.5rem;
+}
+
+.navbar-nav .nav-link {
+    color: rgba(255, 255, 255, 0.8) !important; /* Lighter white for links */
+    transition: color 0.3s ease; /* Smooth hover effect */
+    font-weight: 500;
+}
+
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link.active {
+    color: #fff !important; /* Pure white on hover/active */
+}
+
+.navbar-nav .nav-link.active {
+    font-weight: 600; /* Slightly bolder for active link */
+}
+
+.navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.8%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+}
+
+/* Call to Action Button in Nav */
+.navbar .btn-outline-light {
+    color: #fff;
+    border-color: #fff;
+    transition: all 0.3s ease;
+}
+
+.navbar .btn-outline-light:hover {
+    background-color: #fff;
+    color: var(--hopebridge-blue);
+}
+
+/* General Button Styles */
+.btn-primary {
+    /* Initial state: white text on hopebridge-orange background */
+    background-color: var(--hopebridge-orange);
+    border-color: var(--hopebridge-orange);
+    color: #fff;
+    transition: all 0.3s ease; /* Ensure a smooth transition on hover */
+}
+
+.btn-primary:hover {
+    /* Hover state: hopebridge-orange text on white background with hopebridge-orange border */
+    /* background-color: darken(var(--hopebridge-orange), 10%); Placeholder for darker shade, ideally use Sass function */
+    /* border-color: darken(var(--hopebridge-orange), 10%); */
+    background-color: #fff;
+    border: 2px solid var(--hopebridge-orange); /* Keep the border color consistent */
+    color: var(--hopebridge-orange);
+}
+
+/* Update the 'active' state as well for consistency */
+.btn-primary:active,
+.btn-primary:focus {
+    background-color: #fff !important;
+    border-color: var(--hopebridge-orange) !important;
+    color: var(--hopebridge-orange) !important;
+    box-shadow: 0 0 0 0.25rem rgba(244, 106, 31, 0.5) !important; /* A subtle shadow on focus */
+}
+
+.btn-success {
+    background-color: var(--accent-green);
+    border-color: var(--accent-green);
+    color: #fff;
+}
+
+.btn-success:hover {
+    background-color: darken(var(--accent-green), 10%);
+    border-color: darken(var(--accent-green), 10%);
+}
+
+/* Text Colors */
+.text-hopebridge-blue {
+    color: var(--hopebridge-blue) !important;
+}
+
+.text-hopebridge-orange {
+    color: var(--hopebridge-orange) !important;
+}
+
+.text-dark-gray {
+    color: var(--dark-gray) !important;
+}
+
+.text-light-gray {
+    color: var(--light-gray) !important;
+}
+
+.text-accent-green {
+    color: var(--accent-green) !important;
+}
+
+/* Background Colors */
+.bg-hopebridge-blue {
+    background-color: var(--hopebridge-blue) !important;
+}
+
+.bg-hopebridge-orange {
+    background-color: var(--hopebridge-orange) !important;
+}
+
+.bg-light-gray {
+    background-color: var(--light-gray) !important;
+}
+
+.bg-dark-gray {
+    background-color: var(--dark-gray) !important;
+}
+
+/* Section Padding */
+.section-padding {
+    padding: 60px 0;
+}
+
+@media (min-width: 992px) {
+    .section-padding {
+        padding: 80px 0;
+    }
+}
+
+/* Hero Section Specifics (example for home page) */
+.hero-section {
+    background: linear-gradient(rgba(0, 34, 68, 0.8), rgba(0, 34, 68, 0.8)), url('../images/hero-bg.jpg') center center no-repeat; /* Placeholder image */
+    background-size: cover;
+    color: #fff;
+    padding: 100px 0;
+    text-align: center;
+}
+
+.hero-section h1 {
+    font-size: 3.5rem;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+.hero-section p {
+    font-size: 1.25rem;
+    max-width: 800px;
+    margin: 0 auto 30px;
+}
+
+/* Core Values Section */
+.core-value-item {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+    min-height: 200px; /* Ensure consistent height */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.core-value-item:hover {
+    transform: translateY(-5px);
+}
+
+.core-value-item h4 {
+    color: var(--hopebridge-blue);
+    margin-top: 15px;
+    font-weight: 600;
+}
+
+.core-value-item i {
+    font-size: 3rem;
+    color: var(--hopebridge-orange);
+}
+
+
+/* Footer Styling */
+footer {
+    background-color: var(--hopebridge-blue) !important;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+footer h5 {
+    color: #fff;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+footer a {
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+footer a:hover {
+    color: #fff;
+}
+
+footer .list-unstyled li {
+    margin-bottom: 10px;
+}
+
+footer .list-unstyled li i {
+    color: var(--hopebridge-orange);
+}
+
+footer hr {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Social Icons */
+footer .social-icons a {
+    font-size: 1.8rem;
+    margin: 0 10px;
+    color: #fff;
+    transition: color 0.3s ease;
+}
+
+footer .social-icons a:hover {
+    color: var(--hopebridge-orange);
+}
+
+/* General Form Styles */
+.form-label {
+    font-weight: 500;
+    color: var(--dark-gray);
+}
+
+.form-control:focus {
+    border-color: var(--hopebridge-orange);
+    box-shadow: 0 0 0 0.25rem rgba(244, 106, 31, 0.25);
+}
+
+/* Error Text Styling for Frontend Validation */
+.invalid-feedback {
+    color: #dc3545; /* Bootstrap's default danger color */
+    font-size: 0.875em;
+    margin-top: 0.25rem;
+}
+
+/* Hide Bootstrap's default validation feedback to replace with custom */
+.form-control.is-invalid ~ .invalid-feedback {
+    display: block;
+}
