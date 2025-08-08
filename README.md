@@ -146,9 +146,29 @@ This section provides a step-by-step of how to deploy, set up, and run this Lara
 4.  **Node.js and npm**: at least version `22.18.0` for Node, and version `10.9.3` for NPM
     Node.js is required to handle frontend assets with Vite. The installer bundles npm (Node Package Manager). Download it from nodejs.org 
 
-    **NOTE**: If you upgrade your PHP versoin, then you must reinstall Composer globally on your machine to update it to match the new version of PHP on your machine.
+    **NOTE:**
+    *   If you upgrade your PHP version, then you must reinstall Composer globally on your machine to update it to match the new version of PHP on your machine.
+    *   Also your `php.ini` file to confirm that these PHP extensions are enabled:
 
-    To check the versions installed on your machine, run the following commands on your Bash or Command Prompt terminasl; ensure the latter is opened in Administrator mode.
+        ```
+        extension=curl
+        extension=zip
+        extension=ftp
+        extension=fileinfo
+        extension=gd
+        extension=intl
+        extension=mbstring
+        extension=exif
+        extension=mysqli
+        extension=openssl
+        extension=pdo_mysql
+        extension=pdo_pgsql
+        extension=pgsql
+        ```
+
+    *   Ensure `date.timezone` is also set in your `php.ini` file e.g., `date.timezone = "Africa\Lagos"`. You can check https://www.php.net/manual/en/timezones.php for more information on what your timezone value should be.
+   
+   To check the versions installed on your machine, run the following commands on your Bash or Command Prompt terminasl; ensure the latter is opened in Administrator mode.
 
     ```
     git --version
